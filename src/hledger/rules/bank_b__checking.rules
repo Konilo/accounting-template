@@ -1,0 +1,63 @@
+###########
+# Section 1: setting up parsing
+###########
+
+; Skip the header
+skip 1
+
+; Re-assign a name to each CSV column (input)
+; date is a formal hledger field name so column #1 will be used implicitely as the transaction date w/o the need for a 'date' command
+fields date, date-ope, libelle, debit, credit
+
+description %libelle
+
+; Use the 'credit' value, which is positive as the 'amount'
+amount %credit
+; But, if there's a 'debit' value, overwrite the 'amount' with it. It is already
+; negative in the CSV as expected for an expense
+if %debit .
+	amount %debit
+
+; ISO dates are the default, but I write it to be explicit
+date-format %d/%m/%Y
+
+separator ;
+
+decimal-mark ,
+
+currency EUR
+
+
+###########
+# Section 2: identifying account2
+###########
+
+account1 assets:bank-b:checking-bank-b
+
+; Fallbacks if nothing matched (based on sign of the computed amount).
+; It gets overwritten if anything matches below
+if %amount ^-
+	account2 expenses:unknown
+if ! %amount ^-
+	account2 revenues:unknown
+
+; already covered by the bank A checking acct
+if
+%libelle VIR INST M ZIO KONILO
+%libelle VIR M ZIO KONILO
+	skip
+
+; TODO
+if %libelle VIR S/ PEA
+	account2 assets:bank-b:investment-bank-b:especes
+
+if %libelle RBT
+	account2 expenses:essential:investment-bank-b-fees
+
+; Received and gifted the sponsorship gains to Person A
+if
+%libelle VIR INST Virement avec Bank B
+&& %date 03/02/2025
+	skip
+if %libelle PRIME PARRAINAGE
+	skip

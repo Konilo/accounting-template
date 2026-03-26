@@ -1,0 +1,32 @@
+skip 1
+
+fields date_utc, pair, side, price, executed, amount, fee
+
+date %date_utc
+
+description %side %pair
+
+date-format %Y-%m-%d %H:%M:%S
+separator ,
+decimal-mark .
+
+# BTC Buys with USDT (converted to USDC post-import)
+# Broker A CSV uses USDT, but we convert to USDC in setup.sh (EU regulations)
+# The EUR deposit was already imported from the checking account CSV
+#
+# Fields explanation:
+# - executed: BTC amount purchased (e.g., "0.001BTC") - hledger parses this with BTC commodity
+# - amount: USDT spent (e.g., "100.00USDT") - hledger parses with USDT commodity (converted to USDC later)
+# - fee: trading fee in BTC (e.g., "0.00001BTC") - hledger parses this with BTC commodity
+# - price: BTC price in USDT
+#
+# Note: We explicitly specify the USDT amount spent. setup.sh converts USDT->USDC after import.
+if
+%side BUY
+&& %pair BTCUSDT
+  account1 assets:broker-a:BTC
+  amount1 %executed
+  account2 expenses:essential:broker-a-fees
+  amount2 %fee
+  account3 assets:broker-a:USDT
+  amount3 -%amount

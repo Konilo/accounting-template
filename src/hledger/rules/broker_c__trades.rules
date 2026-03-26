@@ -1,0 +1,27 @@
+skip 1
+
+fields txid, ordertxid, pair, aclass, subclass, time, type, ordertype, price, cost, fee, vol, margin, misc, ledgers, posttxid, posstatuscode, cprice, ccost, cfee, cvol, cmargin, net, trades
+
+date %time
+
+description %type %pair
+
+date-format %Y-%m-%d %H:%M:%S%Q
+separator ,
+decimal-mark .
+
+# BTC Buys - Purchase Bitcoin with EUR
+# cost = total EUR spent including fees
+# fee = trading fee in EUR (already included in cost)
+# vol = BTC amount purchased
+# price = BTC price per unit in EUR
+# Note: We use -%cost for the cash outflow since cost already includes fees.
+if
+%type buy
+&& %pair BTC/EUR
+  account1 assets:broker-c:BTC
+  amount1 %vol BTC
+  account2 expenses:essential:broker-c-fees
+  amount2 %fee EUR
+  account3 assets:broker-c:especes
+  amount3 -%cost EUR

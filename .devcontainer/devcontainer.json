@@ -1,0 +1,43 @@
+{
+	"name": "accounting-template",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/common-utils:2": {},
+		"ghcr.io/devcontainers/features/git:1": {},
+		"ghcr.io/devcontainers/features/github-cli:1": {}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"mechatroner.rainbow-csv",
+				"mark-hansen.hledger-vscode",
+				"EthanOlpin.hledger-rules",
+				"foxundermoon.shell-format@7.2.5",
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-python.debugpy",
+				"ms-python.vscode-python-envs",
+				"charliermarsh.ruff",
+				"Anthropic.claude-code"
+			]
+		}
+	},
+	"runArgs": [
+		"--env-file",
+		".devcontainer/devcontainer.env"
+	],
+	// "mounts": [
+	// 	{
+	// 		"source": "C:/Users/your_username/Documents/Banking Data",
+	// 		"target": "/workspaces/accounting/src/input_data",
+	// 		"type": "bind"
+	// 	}
+	// ],
+	"postCreateCommand": "bash ./.devcontainer/postStartCommand.sh"
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+	// Configure tool-specific properties.
+	// "customizations": {},
+}

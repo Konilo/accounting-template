@@ -1,0 +1,62 @@
+skip 1
+
+fields libelle, operation, place, date, quantite, prix_exe, montant_brut, courtage, montant_net, devise
+
+description %libelle
+
+date-format %d/%m/%Y
+separator ;
+decimal-mark .
+
+# Map fund names to tickers
+if %libelle Amundi MSCI USA Daily \(2x\) Leveraged UCITS ETF - EUR ACC
+  comment ticker: CL2
+
+if %libelle AMUNDI PEA MONDE \(MSCI World\) UCITS ETF - Acc EUR ACC
+  comment ticker: DCAM
+
+if %libelle Amundi MSCI World Swap - UCITS ETF - EUR ACC
+  comment ticker: CW8
+
+; Buys
+; https://hledger.org/1.51/hledger.html#commodity
+if
+%operation Achat Comptant
+&& %libelle Amundi MSCI USA Daily \(2x\) Leveraged UCITS ETF - EUR ACC
+  account1 assets:bank-b:investment-bank-b:CL2
+  amount1 %quantite "CL2" @ %prix_exe EUR
+  account2 expenses:essential:investment-bank-b-fees
+  amount2 -%courtage EUR
+  account3 assets:bank-b:investment-bank-b:especes
+  amount3 %montant_net EUR
+
+if
+%operation Achat Comptant
+&& %libelle AMUNDI PEA MONDE \(MSCI World\) UCITS ETF - Acc EUR ACC
+  account1 assets:bank-b:investment-bank-b:DCAM
+  amount1 %quantite "DCAM" @ %prix_exe EUR
+  account2 expenses:essential:investment-bank-b-fees
+  amount2 -%courtage EUR
+  account3 assets:bank-b:investment-bank-b:especes
+  amount3 %montant_net EUR
+
+if
+%operation Achat Comptant
+&& %libelle Amundi MSCI World Swap - UCITS ETF - EUR ACC
+  account1 assets:bank-b:investment-bank-b:CW8
+  amount1 %quantite "CW8" @ %prix_exe EUR
+  account2 expenses:essential:investment-bank-b-fees
+  amount2 -%courtage EUR
+  account3 assets:bank-b:investment-bank-b:especes
+  amount3 %montant_net EUR
+
+; Sales
+if
+%operation Vente Comptant
+&& %libelle Amundi MSCI World Swap - UCITS ETF - EUR ACC
+  account1 assets:bank-b:investment-bank-b:especes
+  amount1 %montant_net EUR
+  account2 expenses:essential:investment-bank-b-fees
+  amount2 -%courtage EUR
+  account3 assets:bank-b:investment-bank-b:CW8
+  amount3 -%quantite "CW8" @ %prix_exe EUR

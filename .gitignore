@@ -1,0 +1,16 @@
+.venv
+draft.md
+draft/
+*.env
+# *.journal
+# *.csv
+# *.pdf
+.tmp*
+
+# Paisa
+*.db-journal
+*.db
+
+llm/
+
+settings.local*

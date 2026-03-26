@@ -1,0 +1,26 @@
+# https://github.com/ananthakumaran/paisa/blob/master/docs/reference/config.md#accounts
+journal_path: /workspaces/accounting/src/hledger/hledger.journal
+db_path: paisa.db
+sheets_directory: ""
+readonly: false
+ledger_cli: hledger
+default_currency: EUR
+display_precision: 0
+amount_alignment_column: 52
+locale: en-US
+time_zone: ""
+financial_year_starting_month: 1
+week_starting_day: 1
+strict: "no"
+budget:
+    rollover: "yes"
+schedule_al: []
+allocation_targets: []
+commodities: []
+import_templates: []
+accounts: []
+goals:
+    retirement: []
+    savings: []
+user_accounts: []
+credit_cards: []

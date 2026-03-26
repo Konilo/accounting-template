@@ -1,0 +1,26 @@
+skip 6
+
+fields transaction_id, timestamp, transaction_type, in_out, amount_fiat, fiat, amount_asset, asset, asset_market_price, asset_market_price_currency, asset_class, product_id, fee, fee_asset, fee_percent, spread, spread_currency, tax_fiat
+
+date %timestamp
+
+description %transaction_type %asset
+
+date-format %Y-%m-%dT%H:%M:%S%z
+separator ,
+decimal-mark .
+
+# Skip deposits - they are already imported from checking account CSV
+if %transaction_type deposit
+  skip
+
+# BTC Buys - Purchase Bitcoin with EUR
+# The buy transaction shows: outgoing fiat, incoming BTC
+if
+%transaction_type buy
+&& %in_out outgoing
+&& %asset BTC
+  account1 assets:broker-b:BTC
+  amount1 %amount_asset BTC @ %asset_market_price EUR
+  account2 assets:broker-b:especes
+  amount2 -%amount_fiat EUR

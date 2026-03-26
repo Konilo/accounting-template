@@ -1,0 +1,9 @@
+// Workspace keybindings are not suppored by VS Code (unlike workspace settings)
+// But I store some here, as suggestions
+[
+    {
+        "key": "ctrl+enter",
+        "command": "workbench.action.terminal.runSelectedText",
+        "when": "editorTextFocus && editorLangId == 'shellscript'"
+    }
+]

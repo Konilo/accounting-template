@@ -1,0 +1,183 @@
+###########
+# Section 1: setting up parsing
+###########
+
+; Skip the header
+skip 1
+
+; Re-assign a name to each CSV column (input)
+; date is a formal hledger field name so column #1 will be used implicitely as the transaction date w/o the need for a 'date' command
+fields payee, amount, date, trAmount, cbAmount, uniqueId
+
+description %payee (%amount total, %trAmount meal vouchers, %cbAmount card)
+
+code %uniqueId
+
+amount %trAmount
+if !%trAmount .
+	amount %amount
+
+; ISO dates are the default, but I write it to be explicit
+date-format %Y-%m-%d
+
+separator ,
+
+decimal-mark .
+
+currency EUR
+
+
+###########
+# Section 2: identifying account2
+###########
+
+account1 assets:swile:meal-vouchers
+
+; Fallbacks if nothing matched (based on sign of the computed amount). It gets overwritten if anything matches below
+if %amount ^-
+	account2 expenses:unknown
+
+if
+!  %amount ^-
+&& %amount .
+&& %payee credit
+	account2 revenues:wages:employer-a:meal-vouchers
+
+; From my meal vouchers back to my employer
+if
+%payee Employer regularization
+	account2 revenues:wages:employer-a:meal-vouchers
+
+if
+%payee Casino
+%payee So.*Bio
+%payee Naturalia
+%payee Carrefour
+%payee Auchan
+%payee Intermarch
+%payee Calao
+%payee Monop
+%payee Mayenne Bio
+%payee Franprix
+%payee Elodis Sas
+%payee Sarl Yacine
+	account2 expenses:essential:food:groceries
+
+if
+%payee Picard
+%payee Nunzio
+%payee Delices Du R D V
+%payee Delices Du R
+%payee Boulange
+%payee Landemaine Croz
+%payee Sc Maison Bersia
+%payee Trib S Boutique
+	account2 expenses:essential:food:other
+
+if
+%payee Stecroixdelabr
+%payee Createa
+%payee Fluctuart
+%payee Fei Tea
+%payee Coffee
+%payee Hoh Bai
+%payee La Piscine
+%payee La Chope
+%payee Quai De La Phot
+%payee Sas Belart
+%payee Scbe
+%payee Sc Mamma 4
+%payee Deneeve
+%payee Mk Levis
+%payee L'assassin
+%payee Sarl Piadine
+%payee Au Coeur Couron
+%payee Le Lock Groove
+%payee Le Corner Saint Germ
+%payee Le Napol
+	account2 expenses:discretionary:bar-coffee
+
+if
+%payee Pho Passion
+%payee Sum Up
+%payee Anatolie Villag
+%payee Arkose
+%payee Raviol
+%payee Sunday
+%payee Shack
+%payee Les Ptits Gro
+%payee Cantine
+%payee alivi
+%payee Japanos
+%payee Isana
+%payee Rupins
+%payee Adouna
+%payee Le Tricycle
+%payee La Recyclerie
+%payee Mangioni
+%payee Mc Donald
+%payee Mer Sea
+%payee Sc Flesh
+%payee Slow
+%payee Wukong
+%payee Aujourdhui Demain
+%payee Mexicanstyle
+%payee 1000 Et 1 Signes
+%payee alsacien
+%payee Pizza
+%payee Nell Arte
+%payee Cesar
+%payee Bikini
+%payee Chanceux
+%payee Colchide
+%payee Kalimera
+%payee Thai
+%payee L Endroit
+%payee Kind Now
+%payee Le George
+%payee Le Lieu Exqui
+%payee Le Parme
+%payee Kafe
+%payee Sushi
+%payee Suzie Wong
+%payee Suzette et Geo
+%payee Sc Vinea Bercy
+%payee Sc Petite Halle
+%payee Soon
+%payee Trujillo
+%payee Voltaire
+%payee Sainte Cath
+%payee Le Jardin En Poi
+%payee Bastringue
+%payee Joayo
+%payee Dosa
+%payee Darling
+%payee Les Arts
+%payee Milou
+%payee Norlha
+%payee Coderak
+%payee Mandar
+%payee Menthe Bas
+%payee Kous
+%payee Taqueria
+%payee Au Petit Pari
+%payee Yoma
+%payee Le Zorba
+%payee Cite Fertile
+%payee Chez Valentin
+%payee La Residence
+%payee Basilic And Co
+%payee Delices Beyrouth
+%payee Chez Les Deux
+%payee 82 Heo
+%payee Bollynan
+%payee Bricktop
+%payee Hbt Temple D Or
+%payee Corner Nation
+%payee Xmjo
+%payee Bsp Laval
+%payee Dede La Frite
+%payee Eva S Kitchen
+%payee S P I
+%payee Le Lotus Imperia
+	account2 expenses:essential:food:restaurant

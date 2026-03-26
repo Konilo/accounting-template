@@ -1,0 +1,62 @@
+; Declare the five top level accounts in your preferred language/capitalisation;
+; their types (to make reports like bs and is work); and their display order.
+; Write at least 2 spaces before the ; comments.
+account assets       ; type:A, money you own.
+account liabilities  ; type:L, money you owe to others
+account equity       ; type:E, equal to A - L
+account revenues     ; type:R, revenues/income categories
+account expenses     ; type:X, expense categories
+
+alias assets = Assets
+alias liabilities = Liabilities
+alias equity = Equity
+alias revenues = Income
+alias expenses = Expenses
+
+; Use an amount format that's easily compatible w/ Python & R
+commodity 1000.00 EUR
+commodity 1000.000000 BTC
+commodity 1000. "CW8"
+commodity 1000.00 USDC
+commodity 1000. DCAM
+commodity 1000.00 "CL2"
+
+include /workspaces/accounting/src/hledger/prices/cw8.prices
+include /workspaces/accounting/src/hledger/prices/dcam.prices
+include /workspaces/accounting/src/hledger/prices/cl2.prices
+include /workspaces/accounting/src/hledger/prices/btc.prices
+include /workspaces/accounting/src/hledger/prices/usdc.prices
+
+2023-01-01 opening balances
+    assets:bank-a:checking-bank-a    100.00 EUR
+    assets:bank-a:savings-1-bank-a    50.00 EUR
+    assets:security-deposits         500.00 EUR
+    liabilities                     -1000.00 EUR
+    ; 100 checking + 50 savings 1 + 200 Orsay sec. deposit + 300 Paris sec. deposit - 1000 student debt
+    equity:opening-balances-1        350.00 EUR
+
+; I don't have any earlier history
+2024-01-01 opening balances #2
+    assets:bank-a:savings-2-bank-a    200.00 EUR
+    equity:opening-balances-2        -200.00 EUR
+
+2024-05-06 AV broker-d gain represented as a single, punctual gain for simplicity
+    assets:broker-d                   10.00 EUR
+    equity:broker-d                  -10.00 EUR
+
+; from acct statement
+2024-12-31 interets 2024 savings 2
+    assets:bank-a:savings-2-bank-a    5.00 EUR
+    equity:savings-2-bank-a          -5.00 EUR
+
+; lost this tx (can't get it in a CSV from broker_a)
+; Add EUR to USDC conversion transaction
+; The 10 EUR deposit was converted to USDC on broker_a (originally USDT, later
+; converted to USDC due to EU regulations but going straight to USDC for
+; simplicity)
+; Trade spent 9.50 USDC, remaining balance is 0.50 USDC
+; Total USDC received 9.50 + 0.50 = 10.00 USDC
+; We use @@ to specify total EUR cost and let hledger calculate the unit rate
+2024-04-03 EUR to USDC conversion on broker_a
+    assets:broker-a:USDC      10.000000 USDC @@ 10.00 EUR
+    assets:broker-a:especes  -10.00 EUR

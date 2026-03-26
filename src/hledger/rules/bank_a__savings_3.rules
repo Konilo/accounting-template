@@ -1,0 +1,49 @@
+###########
+# Section 1: setting up parsing
+###########
+
+; Skip the header
+skip 1
+
+; Re-assign a name to each CSV column (input)
+; date is a formal hledger field name so column #1 will be used implicitely as the transaction date w/o the need for a 'date' command
+fields date, libelle-simpl, libelle, reference, infos-compl, type-operation, categ, sous-categ, debit, credit, date-ope, date-valeur, pointage
+
+; Set hledger's description (output) as concat of (informal) input columns
+description %libelle | %infos-compl | %categ | %sous-categ | %type-operation
+code %reference
+
+; ISO dates are the default, but I write it to be explicit
+date-format %d/%m/%Y
+
+separator ;
+
+decimal-mark ,
+
+currency EUR
+
+; 'debit' values are negative, so we should not use hledger's formal amount-in/amount-out fields (which expect positive numbers)
+; Instead, we'll compute a single signed 'amount', as this hledger formal field does expect a signed amount
+
+; Use the 'credit' value, which is positive as the 'amount'
+amount %credit
+; But, if there's a 'debit' value, overwrite the 'amount' with it. It is already negative in the CSV as expected for an expense
+if %debit .
+	amount %debit
+
+account1 assets:bank-a:savings-3-bank-a
+
+; most tx are already covered by the checking account import
+; the exceptions are
+; - interests
+; - the closing of my livret A jeune which went straight to the LA w/o passing by the checking acct
+
+if
+%libelle VIREMENT VERS LDDS
+%libelle VIREMENT VERS COMPTE DE DEPOT
+%libelle VIR SEPA M ZIO KONILO
+%libelle OUVERTURE VIR INTERNE
+    skip
+
+if %libelle INTERETS
+    account2 equity:savings-3-bank-a
