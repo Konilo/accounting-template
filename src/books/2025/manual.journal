@@ -1,0 +1,6 @@
+; Hand-written transactions for 2025: facts that are not in any CSV export.
+
+; Life insurance gain represented as a single, punctual gain for simplicity
+2025-12-31 broker D gain 2025
+    assets:broker-d                       15.80 EUR
+    revenues:capital-gains:broker-d      -15.80 EUR

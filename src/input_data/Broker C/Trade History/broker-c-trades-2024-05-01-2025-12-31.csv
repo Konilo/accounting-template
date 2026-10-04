@@ -1,0 +1,2 @@
+"txid","ordertxid","pair","aclass","subclass","time","type","ordertype","price","cost","fee","vol","margin","misc","ledgers","posttxid","posstatuscode","cprice","ccost","cfee","cvol","cmargin","net","trades"
+"TAAAAA-AAAAA-AAAAA1","OAAAAA-AAAAA-AAAAA1","BTC/EUR","forex","crypto","2024-05-03 10:05:16.3267","buy","limit",55100.00000,199.73750,0.79895,0.00362500,0.00000,"initiated","LAAAAA-AAAAA-AAAAA2,LAAAAA-AAAAA-AAAAA3","TAAAAA-AAAAA-AAAAA9","","","","","","","",""

@@ -1,0 +1,31 @@
+; Balances read on account statements, checked at the end of the day.
+
+; ==== Other balances
+
+; Savings 2 closed into savings 1
+2025-01-06 statement balances
+    assets:bank-a:savings-2-bank-a                0 EUR = 0 EUR
+
+2025-12-31 statement balances
+    assets:swile:meal-vouchers                    0 EUR = 900.00 EUR
+
+; Not asserted: broker C EUR cash. Broker C rounds EUR to 4 decimals on its
+; statements, the books use the trades export costs, with 5 decimals.
+
+; ==== Bank A monthly statements
+
+2025-06-30 statement balances
+    assets:bank-a:checking-bank-a                 0 EUR = 18188.07 EUR
+    assets:bank-a:savings-1-bank-a                0 EUR = 9437.85 EUR
+
+2025-12-31 statement balances
+    assets:bank-a:checking-bank-a                 0 EUR = 25310.68 EUR
+    assets:bank-a:savings-1-bank-a                0 EUR = 11368.92 EUR
+
+; ==== Bank B statements
+
+2025-12-31 statement balances
+    assets:bank-b:checking-bank-b                 0 EUR = 2.11 EUR
+    assets:bank-b:investment-bank-b:DCAM          0 DCAM = 660 DCAM
+    assets:bank-b:investment-bank-b:especes       0 EUR = 29.74 EUR
+    assets:in-transit                             0 EUR = 0 EUR
