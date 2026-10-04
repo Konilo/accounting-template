@@ -6,5 +6,10 @@ readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "pandas>=2.3.3",
-    "pricehist>=1.4.14",
+    "pricehist>=1.4.16",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.16.10",
 ]

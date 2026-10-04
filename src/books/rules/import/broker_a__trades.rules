@@ -1,0 +1,38 @@
+skip 1
+
+fields date_utc, pair, side, price, executed, amount, fee
+
+date %date_utc
+
+description %side %pair
+
+date-format %Y-%m-%d %H:%M:%S
+separator ,
+decimal-mark .
+
+# BTC Buys with USDT, booked as USDC
+# The USDT was later converted to USDC (EU regulations); for simplicity the
+# books hold USDC from the start (see the 2024-04-03 EUR to USDC conversion in
+# 2024/manual.journal). The EUR deposit was already imported from the checking
+# account CSV.
+#
+# Fields explanation:
+# - executed: BTC bought, before fee (e.g., "0.0013BTC")
+# - amount: USDT spent (e.g., "85.280013USDT"), the number is booked in USDC
+# - fee: trading fee, deducted from the BTC bought (e.g., "0.0000013BTC")
+# - price: BTC price in USDT
+#
+# The fee is part of the BTC cost rather than an expense: the BTC bought costs
+# the full amount, and the fee leaves the account at zero cost, so the account
+# holds executed - fee (as on the Broker A statement).
+if
+%side BUY
+&& %pair BTCUSDT
+&& %amount ^([0-9.]+)USDT$
+  account1 assets:broker-a:BTC
+  amount1 %executed @@ \1 USDC
+  account2 assets:broker-a:BTC
+  amount2 -%fee @@ 0 USDC
+  account3 assets:broker-a:USDC
+  amount3 -\1 USDC
+  comment fee: %fee

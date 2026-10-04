@@ -1,0 +1,31 @@
+; Bank B investment account, cash operations export.
+; Only the deposits (versements) are imported: purchases and sales come from
+; the securities export (bank_b__investment_securities.rules), at their trade
+; date.
+
+skip 1
+
+encoding iso-8859-1
+
+fields date, date-valeur, libelle, debit, credit
+
+description %libelle
+
+date-format %d/%m/%Y
+separator ;
+decimal-mark ,
+currency EUR
+
+account1 assets:bank-b:investment-bank-b:especes
+
+amount %credit
+if %debit .
+	amount %debit
+
+; Deposits come from bank B checking: through assets:in-transit (the other
+; side is imported from that export)
+if %libelle ^versement$
+	account2 assets:in-transit
+
+if ! %libelle ^versement$
+	skip

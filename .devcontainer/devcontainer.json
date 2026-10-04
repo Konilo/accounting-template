@@ -20,21 +20,28 @@
 				"ms-python.debugpy",
 				"ms-python.vscode-python-envs",
 				"charliermarsh.ruff",
-				"Anthropic.claude-code"
+				"Anthropic.claude-code",
+				"skellock.just"
 			]
 		}
 	},
-	"runArgs": [
-		"--env-file",
-		".devcontainer/devcontainer.env"
+	"containerEnv": {
+		"LEDGER_FILE": "${containerWorkspaceFolder}/src/books/all.journal"
+	},
+	"mounts": [
+		// To keep your real exports and statements out of git, bind them over src/input_data
+		// {
+		// 	"source": "C:/Users/your_username/Documents/Banking Data",
+		// 	"target": "${containerWorkspaceFolder}/src/input_data",
+		// 	"type": "bind"
+		// },
+		{
+			// Claude Code's config, conversations and memory survive rebuilds
+			"source": "claude-config",
+			"target": "/home/vscode/.claude",
+			"type": "volume"
+		}
 	],
-	// "mounts": [
-	// 	{
-	// 		"source": "C:/Users/your_username/Documents/Banking Data",
-	// 		"target": "/workspaces/accounting/src/input_data",
-	// 		"type": "bind"
-	// 	}
-	// ],
 	"postCreateCommand": "bash ./.devcontainer/postStartCommand.sh"
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},

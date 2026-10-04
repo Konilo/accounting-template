@@ -1,0 +1,29 @@
+; Balances read on account statements, checked at the end of the day.
+
+; ==== Other balances
+
+2024-02-01 statement balances
+    assets:broker-b:especes                       0 EUR = 0 EUR
+
+; Not asserted: assets:in-transit at the end of 2024 (1150 EUR). The transfer
+; from bank B checking to the investment account has operation date 2024-12-31
+; on the investment account and 2025-01-02 on the checking account, so it is in
+; transit over the year end, until the checking side is booked.
+
+; ==== Bank A monthly statements
+
+2024-06-30 statement balances
+    assets:bank-a:checking-bank-a                 0 EUR = 7403.83 EUR
+    assets:bank-a:savings-1-bank-a                0 EUR = 4800.00 EUR
+
+2024-12-31 statement balances
+    assets:bank-a:checking-bank-a                 0 EUR = 11169.24 EUR
+    assets:bank-a:savings-1-bank-a                0 EUR = 6712.85 EUR
+    assets:bank-a:savings-2-bank-a                0 EUR = 1425.00 EUR
+
+; ==== Bank B statements
+
+2024-12-31 statement balances
+    assets:bank-b:checking-bank-b                 0 EUR = 1150.00 EUR
+    assets:bank-b:investment-bank-b:CW8           0 "CW8" = 4 "CW8"
+    assets:bank-b:investment-bank-b:especes       0 EUR = 148.73 EUR

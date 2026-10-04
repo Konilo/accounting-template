@@ -1,0 +1,24 @@
+skip 1
+
+fields txid, ordertxid, pair, aclass, subclass, time, type, ordertype, price, cost, fee, vol, margin, misc, ledgers, posttxid, posstatuscode, cprice, ccost, cfee, cvol, cmargin, net, trades
+
+date %time
+
+description %type %pair
+
+date-format %Y-%m-%d %H:%M:%S%Q
+separator ,
+decimal-mark .
+
+# BTC Buys - Purchase Bitcoin with EUR
+# Broker C takes `cost` EUR (= vol x price) and credits `vol` BTC; the fee is
+# included in that exchange (see the monthly statements), so it is part of the
+# BTC cost rather than an expense. It is kept as a fee: tag for information.
+if
+%type buy
+&& %pair BTC/EUR
+  account1 assets:broker-c:BTC
+  amount1 %vol BTC @@ %cost EUR
+  account2 assets:broker-c:especes
+  amount2 -%cost EUR
+  comment fee: %fee EUR

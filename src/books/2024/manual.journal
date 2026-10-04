@@ -1,0 +1,31 @@
+; Hand-written transactions for 2024: facts that are not in any CSV export.
+
+2024-01-01 opening balances
+    assets:bank-a:checking-bank-a      1500.00 EUR
+    assets:bank-a:savings-1-bank-a     3000.00 EUR
+    assets:bank-a:savings-2-bank-a      800.00 EUR
+    assets:security-deposits           1000.00 EUR
+    liabilities:student-loan          -2000.00 EUR
+    ; 1500 checking + 3000 savings 1 + 800 savings 2 + 1000 security deposit - 2000 student loan
+    equity:opening-balances           -4300.00 EUR
+
+; lost this tx (can't get it in a CSV from broker A)
+; The 100 EUR deposit was converted to USDC on broker A (originally USDT, later
+; converted to USDC due to EU regulations but going straight to USDC for
+; simplicity)
+; Trade spent 105.568 USDC, remaining balance is 2.812 USDC
+; Total USDC received 105.568 + 2.812 = 108.38 USDC
+; We use @@ to specify total EUR cost and let hledger calculate the unit rate
+2024-04-03 EUR to USDC conversion on broker A
+    assets:broker-a:USDC      108.38 USDC @@ 100.00 EUR
+    assets:broker-a:especes  -100.00 EUR
+
+; Life insurance gain represented as a single, punctual gain for simplicity
+2024-12-31 broker D gain 2024
+    assets:broker-d                       12.40 EUR
+    revenues:capital-gains:broker-d      -12.40 EUR
+
+; from acct statement (savings 2 has no export)
+2024-12-31 interest 2024 savings 2
+    assets:bank-a:savings-2-bank-a        25.00 EUR
+    revenues:interest:savings-2-bank-a   -25.00 EUR

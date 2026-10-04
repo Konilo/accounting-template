@@ -1,0 +1,6 @@
+; All yearly books together, for multi-year reports.
+; Reports of yearly changes (bal -Y, is -Y) add not:tag:clopen, so that the
+; closing/opening pairs between years don't show up as changes.
+
+include 2024/2024.journal
+include 2025/2025.journal

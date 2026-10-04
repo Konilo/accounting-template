@@ -1,0 +1,93 @@
+; Declarations (accounts and commodities) shared by every yearly book.
+; Strict mode ('just check') rejects any account or commodity not declared here,
+; so a typo in a rule or an uncategorised row (expenses:unknown,
+; revenues:unknown) fails loudly instead of creating a new account.
+; Account types are inherited by subaccounts.
+
+; ==== Assets
+account assets  ; type:A, money I own
+account assets:bank-a:checking-bank-a  ; bank A checking account (main account)
+account assets:bank-a:savings-1-bank-a  ; bank A savings account 1
+account assets:bank-a:savings-2-bank-a  ; bank A savings account 2, no export (closed 2025-01-06)
+account assets:bank-b:checking-bank-b  ; bank B checking account (used to send money to the investment account)
+account assets:bank-b:investment-bank-b:CW8  ; bank B investment account, Amundi MSCI World Swap ETF (sold 2025-09-29)
+account assets:bank-b:investment-bank-b:DCAM  ; bank B investment account, Amundi PEA Monde (MSCI World) ETF
+account assets:bank-b:investment-bank-b:especes  ; bank B investment account, cash
+account assets:broker-a:BTC  ; bitcoin held on broker A
+account assets:broker-a:USDC  ; USDC held on broker A (bought as USDT, later converted for EU regulation compliance)
+account assets:broker-a:especes  ; EUR cash on broker A
+account assets:broker-b:BTC  ; bitcoin held on broker B
+account assets:broker-b:especes  ; EUR cash on broker B
+account assets:broker-c:BTC  ; bitcoin held on broker C
+account assets:broker-c:especes  ; EUR cash on broker C
+account assets:broker-d  ; life insurance (assurance vie) at broker D
+account assets:in-transit  ; transfers between own accounts, while one side is booked and not the other
+account assets:security-deposits  ; rental security deposits held by landlords
+account assets:swile:meal-vouchers  ; Swile meal voucher balance
+
+; ==== Liabilities
+account liabilities  ; type:L, money I owe to others
+account liabilities:student-loan  ; student loan
+
+; ==== Equity
+account equity  ; type:E, equal to A - L
+account equity:opening-balances  ; balances before the books start (2024-01-01)
+account equity:opening-closing-balances  ; yearly carry-forward between books (close --clopen); nets to 0 across years
+
+; ==== Revenues
+account revenues  ; type:R, revenues/income categories
+account revenues:capital-gains:broker-d  ; broker D life insurance gain
+account revenues:interest:savings-1-bank-a  ; savings 1 interest
+account revenues:interest:savings-2-bank-a  ; savings 2 interest
+account revenues:benefits  ; state benefits
+account revenues:presents-received  ; money received as presents
+account revenues:refunds:employer-a:expense-claims  ; employer A reimbursements of professional expenses (notes de frais), not perks
+account revenues:wages:employer-a:bank-wire  ; employer A net salary, paid by bank wire
+account revenues:wages:employer-a:meal-vouchers  ; employer A meal voucher top-ups (Swile)
+account revenues:wages:employer-a:perks  ; employer A perks (e.g., public transport pass, phone plan)
+
+; ==== Expenses
+account expenses  ; type:X, expense categories
+account expenses:discretionary:appliances-electronics  ; electronics and household appliances
+account expenses:discretionary:bar-coffee  ; bars and coffee shops
+account expenses:discretionary:books  ; books and magazines
+account expenses:discretionary:clothes  ; clothes, shoes, dry cleaning
+account expenses:discretionary:cosmetics  ; hygiene, hairdresser, personal care
+account expenses:discretionary:exhibitions-museum-cinema  ; exhibitions, museums, cinema
+account expenses:discretionary:hotel  ; hotels
+account expenses:discretionary:leasure  ; other leisure and holidays
+account expenses:discretionary:other  ; other shopping, stationery
+account expenses:discretionary:presents-given  ; presents and donations given
+account expenses:discretionary:digital-services  ; digital services, subscriptions (e.g., Spotify) and pay-as-you-go (e.g., AWS); phone and internet are in telcoms
+account expenses:essential:bank-charges  ; bank fees
+account expenses:essential:electricity  ; electricity, water, gas
+account expenses:essential:food:fast-food  ; fast food
+account expenses:essential:food:groceries  ; supermarkets
+account expenses:essential:food:other  ; bakeries, small food shops
+account expenses:essential:food:restaurant  ; restaurants
+account expenses:essential:home-maintenance-supplies  ; home maintenance, furniture, supplies
+account expenses:essential:medical  ; doctors, pharmacy, net of health insurance refunds
+account expenses:essential:other  ; post, administrative and other essential costs
+account expenses:essential:investment-bank-b-fees  ; bank B investment account brokerage fees and their refunds on the checking account
+account expenses:essential:rent  ; rent
+account expenses:essential:school-tuition  ; tuition and education
+account expenses:essential:sport  ; sport and equipment
+account expenses:essential:taxes  ; income tax and other taxes (cash basis)
+account expenses:essential:telcoms  ; internet and phone
+account expenses:essential:transport:bike  ; bike
+account expenses:essential:transport:car-insurance  ; car insurance
+account expenses:essential:transport:fuel  ; fuel
+account expenses:essential:transport:maintenance  ; vehicle maintenance
+account expenses:essential:transport:other  ; other transport
+account expenses:essential:transport:public-transport  ; public transport
+account expenses:essential:transport:toll-parking  ; tolls and parking
+account expenses:essential:transport:train-plane-ferry  ; trains, planes, ferries
+account expenses:essential:transport:vehicule-rent  ; car and motorbike rental
+
+; ==== Commodities
+; Use an amount format that's easily compatible w/ Python & R
+commodity 1000.00 EUR
+commodity 1000.000000 BTC
+commodity 1000. "CW8"
+commodity 1000.00 USDC
+commodity 1000. DCAM

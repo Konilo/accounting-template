@@ -1,0 +1,24 @@
+; Corrections to specific rows of the bank A checking account exports, where
+; the bank's category is wrong and no general pattern exists. Included at the
+; end of import/bank_a__checking.rules, so these assignments override the
+; import rules. Keyed on the bank reference, or on the date and label when a
+; row has no reference.
+
+; ==== Employer A wires mixing perks and expense claims (split by hand)
+if %reference ^2411859K10000101$
+	account2 revenues:wages:employer-a:perks
+	amount2 -45,00
+	account3 revenues:refunds:employer-a:expense-claims
+	amount3 -30,00
+if %reference ^2530159K10000102$
+	account2 revenues:wages:employer-a:perks
+	amount2 -45,00
+	account3 revenues:refunds:employer-a:expense-claims
+	amount3 -67,30
+
+; ==== Other recategorisations
+if
+%date 23/11/2024
+&& %libelle-simpl ^BOOKSHOP$
+	account2 expenses:discretionary:presents-given
+	comment a book given as a present

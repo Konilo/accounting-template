@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  pull_request:
+    # labeled/unlabeled: re-run the frozen job when the deliberate-retroactive-change label changes
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+  # Merges can't be blocked on this plan: re-check what lands on main
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      # shellcheck is preinstalled on the runner
+      - run: just fmt-lint-uv-check
+
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - run: just check
+
+  # The committed derived files are what the CSVs and the rules give
+  reproduce:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+      - run: just rebuild
+      - name: Derived files up to date
+        run: |
+          git diff --exit-code || {
+            echo "::error::Derived files differ from a rebuild: run 'just rebuild' and commit"
+            exit 1
+          }
+
+  # The closed years don't change, unless the PR has the deliberate-retroactive-change label
+  frozen:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup
+      - name: Closed years unchanged
+        env:
+          BASE: ${{ github.event.pull_request.base.sha }}
+          RETROACTIVE: ${{ contains(github.event.pull_request.labels.*.name, 'deliberate-retroactive-change') }}
+        run: |
+          # 0: unchanged, 3: changed, anything else: an error, which fails even with the label
+          status=0
+          just frozen "$BASE" > frozen.diff || status=$?
+          if [ "$status" -eq 0 ]; then
+            cat frozen.diff
+            exit 0
+          elif [ "$status" -ne 3 ]; then
+            cat frozen.diff
+            echo "::error::frozen.sh failed (exit $status)"
+            exit "$status"
+          fi
+          {
+            echo "## Changes to closed years"
+            echo '```diff'
+            head -c 900000 frozen.diff  # the summary is limited to 1 MiB
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          cat frozen.diff
+          if [ "$RETROACTIVE" = true ]; then
+            echo "::notice::Closed years changed, allowed by the deliberate-retroactive-change label (diff in the job summary)"
+          else
+            echo "::error::Closed years changed: add the 'deliberate-retroactive-change' label if deliberate"
+            exit 1
+          fi

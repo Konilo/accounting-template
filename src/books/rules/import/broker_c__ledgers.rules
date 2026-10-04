@@ -1,0 +1,42 @@
+; Broker C ledgers export: every movement of the account, one row per asset.
+; Only what the trades export (broker_c__trades.rules) lacks is imported:
+; - EUR deposits, with Broker C's date
+; - the trading fees, which Broker C takes in BTC from the BTC bought
+; The trade rows themselves are skipped (one trade = two unlinked rows here;
+; the trades export books each trade with its EUR cost).
+
+skip 1
+
+; amount and balance are hledger field names, so those columns are renamed
+fields txid, refid, time, type, subtype, aclass, subclass, asset, wallet, qty, fee, kbalance, amountusd, feeusd, balanceusd, feecurrency
+
+date %time
+date-format %Y-%m-%d %H:%M:%S
+separator ,
+decimal-mark .
+code %refid
+
+; Deposits from bank A: through assets:in-transit (the other side is
+; imported from the bank A export)
+if
+%type ^deposit$
+&& %asset ^EUR$
+  description deposit EUR
+  account1 assets:broker-c:especes
+  amount1 %qty EUR
+  account2 assets:in-transit
+  amount2 -%qty EUR
+
+; Trading fee taken in BTC: part of the BTC cost, so it leaves
+; the account at zero cost, like the broker A fees
+if
+%type ^trade$
+&& %asset ^BTC$
+  description fee BTC/EUR
+  account1 assets:broker-c:BTC
+  amount1 -%fee BTC @@ 0 EUR
+
+if
+%type ^trade$
+&& %asset ^EUR$
+  skip

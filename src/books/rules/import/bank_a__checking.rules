@@ -1,0 +1,224 @@
+###########
+# Section 1: setting up parsing
+###########
+
+; Skip the header
+skip 1
+
+; Re-assign a name to each CSV column (input)
+; date is a formal hledger field name so column #1 will be used implicitely as the transaction date w/o the need for a 'date' command
+fields date, libelle-simpl, libelle, reference, infos-compl, type-operation, categ, sous-categ, debit, credit, date-ope, date-valeur, pointage
+
+; Set hledger's description (output) as concat of (informal) input columns
+description %libelle | %infos-compl | %categ | %sous-categ | %type-operation
+code %reference
+
+; ISO dates are the default, but I write it to be explicit
+date-format %d/%m/%Y
+
+separator ;
+
+decimal-mark ,
+
+currency EUR
+
+; 'debit' values are negative, so we should not use hledger's formal amount-in/amount-out fields (which expect positive numbers)
+; Instead, we'll compute a single signed 'amount', as this hledger formal field does expect a signed amount
+
+; Use the 'credit' value, which is positive as the 'amount'
+amount %credit
+; But, if there's a 'debit' value, overwrite the 'amount' with it. It is already
+; negative in the CSV as expected for an expense
+if %debit .
+	amount %debit
+
+
+###########
+# Section 2: identifying accounts
+###########
+
+; account1 = bank A checking account
+account1 assets:bank-a:checking-bank-a
+
+; account2
+; Fallbacks if nothing matched (based on sign of the computed amount). It gets
+; overwritten if anything matches below. NB: "+" are explicit in these CSVs
+if
+%debit ^-
+	account2 expenses:unknown
+if
+%credit ^\+
+	account2 revenues:unknown
+
+; Alimentation
+if %sous-categ ^Hyper/supermarche$
+	account2 expenses:essential:food:groceries
+if %sous-categ ^Restaurant$
+	account2 expenses:essential:food:restaurant
+if %sous-categ ^Petit commercant$
+	account2 expenses:essential:food:other
+if %sous-categ ^Restauration rapide$
+	account2 expenses:essential:food:fast-food
+
+; Revenus et rentrees d'argent
+if %sous-categ ^Remboursements de soins$
+	account2 expenses:essential:medical
+if %sous-categ ^Dons et cadeaux recus$
+	account2 revenues:presents-received
+if %sous-categ ^Aides et allocations$
+	account2 revenues:benefits
+
+; Employer A wires. The bank's sub-category is not reliable (salaries, perks
+; and expense claims can all be "Note de frais"), so they are classified on the
+; payer (libelle-simpl) and the format of the details (infos-compl):
+; - salary: payroll reference "MM/YYYY DoeJ-..."
+; - expense claims: an "ID.JOHN.DOE" reference
+; - perks (e.g., transport pass, phone plan): everything else
+; Wires mixing perks and claims are split in the corrections file.
+if %libelle-simpl ^EMPLOYER A$
+	account2 revenues:wages:employer-a:perks
+if
+%libelle-simpl ^EMPLOYER A$
+&& %infos-compl \.JOHN\.DOE
+	account2 revenues:refunds:employer-a:expense-claims
+if
+%libelle-simpl ^EMPLOYER A$
+&& %infos-compl DoeJ-
+	account2 revenues:wages:employer-a:bank-wire
+
+; Sante
+if %sous-categ ^Consultation medicale$
+	account2 expenses:essential:medical
+if %sous-categ ^Pharmacie$
+	account2 expenses:essential:medical
+
+; Loisirs et vacances
+if %sous-categ ^Sport, Gym et Equipement$
+	account2 expenses:essential:sport
+if %sous-categ ^Video, Musique et jeux$
+	account2 expenses:discretionary:digital-services
+if %sous-categ ^Loisirs et vacances - autre$
+	account2 expenses:discretionary:leasure
+if %sous-categ ^Expo, musee, cinema$
+	account2 expenses:discretionary:exhibitions-museum-cinema
+if %sous-categ ^Bar$
+	account2 expenses:discretionary:bar-coffee
+if %sous-categ ^Livres, Magazines$
+	account2 expenses:discretionary:books
+if %sous-categ ^Hotel$
+	account2 expenses:discretionary:hotel
+
+; Banque et assurances
+if %sous-categ ^Frais bancaires$
+	account2 expenses:essential:bank-charges
+; Repayments of the student loan, matched on the creditor
+if
+%sous-categ ^Credit$
+&& %libelle-simpl ^PUBLIC TREASURY$
+	account2 liabilities:student-loan
+
+; Logement - maison
+if %sous-categ ^Internet et telephonie$
+	account2 expenses:essential:telcoms
+if %sous-categ ^Loyers et traites$
+	account2 expenses:essential:rent
+if %sous-categ ^Energie eau, gaz, electricite, fioul$
+	account2 expenses:essential:electricity
+if %sous-categ ^Travaux - Entretien$
+	account2 expenses:essential:home-maintenance-supplies
+if %sous-categ ^Ameublement et appareil$
+	account2 expenses:essential:home-maintenance-supplies
+
+; Transports
+if %sous-categ ^Transports en commun$
+	account2 expenses:essential:transport:public-transport
+if %sous-categ ^Assurance auto$
+	account2 expenses:essential:transport:car-insurance
+if %sous-categ ^Trains, avions et ferrys$
+	account2 expenses:essential:transport:train-plane-ferry
+if %sous-categ ^Carburant$
+	account2 expenses:essential:transport:fuel
+if %sous-categ ^Velo$
+	account2 expenses:essential:transport:bike
+if %sous-categ ^Location de voiture et moto$
+	account2 expenses:essential:transport:vehicule-rent
+if %sous-categ ^Peage et Stationnement$
+	account2 expenses:essential:transport:toll-parking
+if %sous-categ ^Transports - autre$
+	account2 expenses:essential:transport:other
+if %sous-categ ^Entretien de vehicule$
+	account2 expenses:essential:transport:maintenance
+
+; Shopping et services
+if %sous-categ ^Vetements et chaussures$
+	account2 expenses:discretionary:clothes
+if %sous-categ ^Cadeaux et dons$
+	account2 expenses:discretionary:presents-given
+if %sous-categ ^High-Tech/Electromenager$
+	account2 expenses:discretionary:appliances-electronics
+if %sous-categ ^Shopping et services - autre$
+	account2 expenses:discretionary:other
+; Digital services, whatever the bank's sub-category: subscriptions (e.g.,
+; Spotify) and pay-as-you-go (e.g., AWS). A new service needs a line here.
+if
+%libelle-simpl ^Spotify
+%libelle-simpl ^AWS EMEA$
+	account2 expenses:discretionary:digital-services
+if %sous-categ ^Papeterie et fournitures$
+	account2 expenses:discretionary:other
+if %sous-categ ^Pressing$
+	account2 expenses:discretionary:clothes
+if
+%sous-categ ^Hygiene$
+%sous-categ ^Coiffeurs et soins du corps$
+	account2 expenses:discretionary:cosmetics
+if %sous-categ ^Poste et colis$
+	account2 expenses:essential:other
+
+; Impots et taxes
+if %sous-categ ^Impots et taxes - autre$
+	account2 expenses:essential:taxes
+if %sous-categ ^Impots sur le revenu$
+	account2 expenses:essential:taxes
+
+; Education et famille
+if %sous-categ ^Scolarite et etudes$
+	account2 expenses:essential:school-tuition
+
+; Epargne
+if %sous-categ ^Placement financier$
+	account2 assets:investments
+; No export for broker A's deposits, broker D and savings 2: their side of the
+; transfer is booked here
+if %libelle VIREMENT VERS BROKER A
+	account2 assets:broker-a:especes
+if %libelle VIREMENT VERS BROKER D
+	account2 assets:broker-d
+if %infos-compl VIREMENT VERS LIVRET JEUNE
+	account2 assets:bank-a:savings-2-bank-a
+
+; Transfers between own accounts that have their own export go through
+; assets:in-transit: this side is booked here with this account's date, the
+; other side is imported from the other account's export with its own date.
+; In-transit is back to 0 once both sides are booked.
+; - brokers B and C
+; - bank B checking (instant transfers to my own name)
+; - savings 1, both ways
+if
+%libelle VIREMENT VERS BROKER (B|C)
+	account2 assets:in-transit
+if
+%libelle VIREMENT VERS JOHN DOE
+&& %infos-compl Virement instant
+	account2 assets:in-transit
+if
+%libelle VIREMENT VERS LIVRET A
+%libelle VIREMENT VERS COMPTE DE DEPOT
+	account2 assets:in-transit
+
+; Juridique et administratif
+if %sous-categ ^Juridique et administratif - autre$
+	account2 expenses:essential:other
+
+; Row-specific corrections, last so that they override the rules above
+include ../corrections/bank_a__checking.rules

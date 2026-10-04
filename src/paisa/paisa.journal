@@ -1,0 +1,12 @@
+; Paisa's view of the books. Paisa only recognises the top-level accounts
+; Assets, Liabilities, Equity, Income and Expenses (case-sensitive), so the
+; standard names used in the books are renamed here, for Paisa only.
+; hledger applies these aliases to the included files.
+
+alias assets = Assets
+alias liabilities = Liabilities
+alias equity = Equity
+alias revenues = Income
+alias expenses = Expenses
+
+include ../books/all.journal

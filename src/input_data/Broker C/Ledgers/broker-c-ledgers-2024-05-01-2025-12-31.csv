@@ -1,0 +1,4 @@
+"txid","refid","time","type","subtype","aclass","subclass","asset","wallet","amount","fee","balance","amountusd","feeusd","balanceusd","feecurrency"
+"LAAAAA-AAAAA-AAAAA1","FAAAAAA-AAAAAAAAAAAAAAAAAAAAAAAAAA","2024-05-03 10:00:18","deposit","","currency","fiat","EUR","spot / main",200.0000,0,200.0000,214.2900000000,0,214.2900000000,""
+"LAAAAA-AAAAA-AAAAA2","TAAAAA-AAAAA-AAAAA1","2024-05-03 10:05:16","trade","tradespot","currency","fiat","EUR","spot / main",-199.7375,0,0.2625,-214.0000000000,0,0.2900000000,""
+"LAAAAA-AAAAA-AAAAA3","TAAAAA-AAAAA-AAAAA1","2024-05-03 10:05:16","trade","tradespot","currency","crypto","BTC","spot / main",0.0036250000,0.0000145000,0.003610500000,214.0000000000,0.8500000000,213.1500000000,"BTC"

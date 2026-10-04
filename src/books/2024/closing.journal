@@ -1,0 +1,19 @@
+2024-12-31 closing balances  ; clopen:2025
+    assets:broker-d                                  -512.40 EUR = 0.00 EUR
+    assets:in-transit                              1150.0000 EUR = 0.0000 EUR
+    assets:security-deposits                        -1000.00 EUR = 0.00 EUR
+    assets:bank-a:checking-bank-a                  -11169.24 EUR = 0.00 EUR
+    assets:bank-a:savings-1-bank-a                  -6712.85 EUR = 0.00 EUR
+    assets:bank-a:savings-2-bank-a                  -1425.00 EUR = 0.00 EUR
+    assets:bank-b:checking-bank-b                      -1150 EUR = 0 EUR
+    assets:bank-b:investment-bank-b:CW8               -4.0 "CW8" = 0.0 "CW8"
+    assets:bank-b:investment-bank-b:especes          -148.73 EUR = 0.00 EUR
+    assets:broker-a:BTC                           -0.0015984 BTC = 0.0000000 BTC
+    assets:broker-a:USDC                          -2.812000 USDC = 0.000000 USDC
+    assets:broker-b:BTC                          -0.00126224 BTC = 0.00000000 BTC
+    assets:broker-c:BTC                        -0.0036105000 BTC = 0.0000000000 BTC
+    assets:broker-c:especes                         -0.26250 EUR = 0.00000 EUR
+    assets:swile:meal-vouchers                       -450.00 EUR = 0.00 EUR
+    liabilities:student-loan                         1000.00 EUR = 0.00 EUR
+    equity:opening-closing-balances
+
