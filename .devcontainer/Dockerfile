@@ -1,10 +1,10 @@
 FROM mcr.microsoft.com/devcontainers/base:jammy
 
 # Also used by the CI
-ARG HLEDGER_VERSION=1.52.4
+ARG HLEDGER_VERSION=1.99.5
 ARG JUST_VERSION=1.58.0
 
-RUN curl -sL https://github.com/simonmichael/hledger/releases/download/${HLEDGER_VERSION}/hledger-linux-x64.tar.gz \
+RUN curl -sL https://github.com/hledgerorg/hledger/releases/download/${HLEDGER_VERSION}/hledger-linux-x64.tar.gz \
     | tar -xzv -f- -C/usr/local/bin hledger hledger-ui hledger-web
 
 # To query CSVs with SQL
