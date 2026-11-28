@@ -32,7 +32,10 @@ done
 # What the books of a checkout say about a closed year
 fingerprint() {
     local dir="$1" year="$2"
-    hledger -f "$dir/src/books/$year/$year.journal" print -x -I
+    # Without the comment lines that print shows before a transaction (since
+    # hledger 2): editing them changes no transaction
+    hledger -f "$dir/src/books/$year/$year.journal" print -x -I >"$tmp/print"
+    grep -v '^;' "$tmp/print" || true
 }
 
 changed=0
