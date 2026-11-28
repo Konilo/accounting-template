@@ -1,0 +1,10 @@
+"Disclaimer: All data is without guarantee, errors and changes are reserved."
+"John Doe, 1990-01-01"
+john.doe@example.com
+"Account opened at: 2024-04-01T10:00:00+02:00"
+"Venue: Broker A"
+"Transaction ID",Timestamp,"Transaction Type",In/Out,"Amount Fiat",Fiat,"Amount Asset",Asset,"Asset market price","Asset market price currency","Asset class","Product ID",Fee,"Fee asset","Fee percent",Spread,"Spread Currency","Tax Fiat"
+D0000000-0000-0000-0000-000000000001,2024-04-11T09:00:00+02:00,deposit,incoming,200.00,EUR,-,EUR,-,-,Fiat,-,0.00000000,EUR,-,-,-,0.00
+T0000000-0000-0000-0000-000000000002,2024-04-11T09:05:00+02:00,buy,outgoing,200.00,EUR,0.00332000,BTC,60240.96,EUR,Cryptocurrency,1,-,-,-,-,-,0.00
+D0000000-0000-0000-0000-000000000003,2025-05-06T18:30:00+02:00,deposit,incoming,100.00,EUR,-,EUR,-,-,Fiat,-,0.00000000,EUR,-,-,-,0.00
+T0000000-0000-0000-0000-000000000004,2025-05-06T18:32:00+02:00,buy,outgoing,100.00,EUR,0.00106000,BTC,94339.62,EUR,Cryptocurrency,1,-,-,-,-,-,0.00

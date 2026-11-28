@@ -1,5 +1,5 @@
 # https://github.com/ananthakumaran/paisa/blob/master/docs/reference/config.md#accounts
-journal_path: /workspaces/accounting/src/hledger/hledger.journal
+journal_path: paisa.journal
 db_path: paisa.db
 sheets_directory: ""
 readonly: false

@@ -1,0 +1,9 @@
+; Balances read on account statements, checked at the end of the day.
+
+; ==== Year-end statements
+2025-12-31 statement balances
+    assets:bank-a:checking-bank-a     0 EUR = 4883.22 EUR
+    assets:bank-a:savings-1-bank-a    0 EUR = 5487.15 EUR
+    assets:bank-b:checking-bank-b     0 EUR = 1.99 EUR
+    assets:bank-b:pea-bank-b:especes  0 EUR = 48.01 EUR
+    assets:swile:meal-vouchers        0 EUR = 155.25 EUR

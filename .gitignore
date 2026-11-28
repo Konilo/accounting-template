@@ -1,16 +1,13 @@
-.venv
-draft.md
+.venv/
+.ruff_cache/
+__pycache__/
 draft/
+*.tmp
+settings.local*
+.env
+.env.*
 *.env
-# *.journal
-# *.csv
-# *.pdf
-.tmp*
 
 # Paisa
-*.db-journal
 *.db
-
-llm/
-
-settings.local*
+*.db-journal

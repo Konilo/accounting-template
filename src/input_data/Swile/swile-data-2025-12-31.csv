@@ -1,0 +1,9 @@
+payee,amount,date,trAmount,cbAmount,uniqueId
+Employer regularization,-10,2025-12-15,,,Employer regularization|2025-12-15|-10|:r8:
+Monop,-9.85,2025-09-03,,,Monop|2025-09-03|-9.85|:r7:
+Pizzeria Napoli,-18,2025-02-14,,,Pizzeria Napoli|2025-02-14|-18|:r6:
+Meal vouchers credit,120,2025-01-31,,,Meal vouchers credit|2025-01-31|120|:r5:
+Picard,-23,2024-06-08,-20,-3,Picard|2024-06-08|-23|:r4:
+Cantine du Coin,-11.5,2024-03-12,,,Cantine du Coin|2024-03-12|-11.5|:r3:
+Carrefour,-15.4,2024-02-05,,,Carrefour|2024-02-05|-15.4|:r2:
+Meal vouchers credit,120,2024-02-01,,,Meal vouchers credit|2024-02-01|120|:r1:

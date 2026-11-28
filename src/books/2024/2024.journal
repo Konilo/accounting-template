@@ -1,0 +1,9 @@
+; Book for 2024. Set LEDGER_FILE to this file to work on 2024 alone.
+
+include ../common.journal
+include ../prices/2024/*.prices
+include opening.journal
+include generated.journal
+include manual.journal
+include assertions.journal
+include closing.journal

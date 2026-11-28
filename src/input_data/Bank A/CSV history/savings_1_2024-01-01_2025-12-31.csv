@@ -1,0 +1,6 @@
+Date de comptabilisation;Libelle simplifie;Libelle operation;Reference;Informations complementaires;Type operation;Categorie;Sous categorie;Debit;Credit;Date operation;Date de valeur;Pointage operation
+31/12/2025;INTERETS 2025;INTERETS 2025;;M JOHN DOE-;Divers;A categoriser - rentree d'argent;Rentree d'argent - a categoriser;;+128,75;31/12/2025;31/12/2025;0
+09/10/2025;VIREMENT VERS COMPTE DE DEPOT;VIREMENT VERS COMPTE DE DEPOT;2528259IN0001270;;Virement;Transaction exclue;Virement interne;-500,00;;09/10/2025;09/10/2025;0
+02/01/2025;VIREMENT VERS LIVRET A;VIREMENT VERS LIVRET A;2436559IN0000412;;Virement;Transaction exclue;Virement interne;;+300,00;02/01/2025;01/01/2025;0
+31/12/2024;INTERETS 2024;INTERETS 2024;;M JOHN DOE-;Divers;A categoriser - rentree d'argent;Rentree d'argent - a categoriser;;+158,40;31/12/2024;31/12/2024;0
+30/01/2024;VIREMENT VERS LIVRET A;VIREMENT VERS LIVRET A;2402959IN0000117;;Virement;Transaction exclue;Virement interne;;+400,00;30/01/2024;30/01/2024;0

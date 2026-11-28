@@ -1,0 +1,40 @@
+###########
+# Section 1: setting up parsing
+###########
+
+; Same export format as the Bank A checking account
+skip 1
+
+fields date, libelle-simpl, libelle, reference, infos-compl, type-operation, categ, sous-categ, debit, credit, date-ope, date-valeur, pointage
+
+description %libelle | %infos-compl | %categ | %sous-categ | %type-operation
+code %reference
+
+date-format %d/%m/%Y
+
+separator ;
+
+decimal-mark ,
+
+currency EUR
+
+amount %credit
+if %debit .
+	amount %debit
+
+
+###########
+# Section 2: identifying accounts
+###########
+
+account1 assets:bank-a:savings-1-bank-a
+
+; Transfers with the checking account: through assets:in-transit (the other
+; side is imported from the checking account export)
+if
+%libelle ^VIREMENT VERS LIVRET A$
+%libelle ^VIREMENT VERS COMPTE DE DEPOT$
+	account2 assets:in-transit
+
+if %libelle ^INTERETS
+	account2 revenues:interest:savings-1-bank-a

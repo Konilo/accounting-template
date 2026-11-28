@@ -1,0 +1,64 @@
+###########
+# Section 1: setting up parsing
+###########
+
+; Skip the header
+skip 1
+
+; Re-assign a name to each CSV column (input)
+; date is a formal hledger field name so column #1 will be used implicitely as the transaction date w/o the need for a 'date' command
+fields payee, amount, date, trAmount, cbAmount, uniqueId
+
+description %payee (%amount total, %trAmount meal vouchers, %cbAmount card)
+
+code %uniqueId
+
+; A payment can be split between the meal vouchers (trAmount) and a bank card
+; (cbAmount): only the meal voucher part leaves this account
+amount %trAmount
+if !%trAmount .
+	amount %amount
+
+; ISO dates are the default, but I write it to be explicit
+date-format %Y-%m-%d
+
+separator ,
+
+decimal-mark .
+
+currency EUR
+
+
+###########
+# Section 2: identifying account2
+###########
+
+account1 assets:swile:meal-vouchers
+
+; Fallbacks if nothing matched (based on sign of the computed amount). It gets overwritten if anything matches below
+if %amount ^-
+	account2 expenses:unknown
+if
+!  %amount ^-
+&& %amount .
+&& %payee credit
+	account2 revenues:wages:employer-a:meal-vouchers
+
+; From my meal vouchers back to my employer
+if
+%payee Employer regularization
+	account2 revenues:wages:employer-a:meal-vouchers
+
+if
+%payee Carrefour
+%payee Monop
+%payee Franprix
+	account2 expenses:essential:food:groceries
+if
+%payee Picard
+%payee Boulange
+	account2 expenses:essential:food:other
+if
+%payee Cantine
+%payee Pizzeria
+	account2 expenses:essential:food:restaurant

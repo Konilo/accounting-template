@@ -1,0 +1,9 @@
+; Hand-written transactions for 2024: facts that are not in any CSV export.
+
+2024-01-01 opening balances
+    assets:bank-a:checking-bank-a   1500.00 EUR
+    assets:bank-a:savings-1-bank-a  5000.00 EUR
+    assets:security-deposits         800.00 EUR
+    liabilities:student-loan       -3000.00 EUR
+    ; 1500 checking + 5000 savings 1 + 800 security deposit - 3000 student loan
+    equity:opening-balances        -4300.00 EUR

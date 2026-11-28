@@ -1,0 +1,12 @@
+2025-01-01 opening balances  ; clopen:2025
+    assets:in-transit                            300.00 EUR       =   300.00 EUR
+    assets:security-deposits                     800.00 EUR       =   800.00 EUR
+    assets:bank-a:checking-bank-a               2382.86 EUR       =  2382.86 EUR
+    assets:bank-a:savings-1-bank-a              5558.40 EUR       =  5558.40 EUR
+    assets:bank-b:pea-bank-b:CW8                   2.0 "CW8"      =     2.0 "CW8"
+    assets:bank-b:pea-bank-b:especes              38.01 EUR       =    38.01 EUR
+    assets:broker-a:BTC                            0.00332000 BTC =     0.00332000 BTC
+    assets:swile:meal-vouchers                    73.1 EUR        =    73.1 EUR
+    liabilities:student-loan                   -2850.00 EUR       = -2850.00 EUR
+    equity:opening-closing-balances
+

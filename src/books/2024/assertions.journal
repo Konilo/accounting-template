@@ -1,0 +1,13 @@
+; Balances read on account statements, checked at the end of the day.
+
+; The 300 EUR transfer of 2024-12-30 from the checking account reached
+; savings 1 on 2025-01-02: it is in assets:in-transit at the end of 2024, and
+; the savings 1 statement does not include it.
+
+; ==== Year-end statements
+2024-12-31 statement balances
+    assets:bank-a:checking-bank-a     0 EUR = 2382.86 EUR
+    assets:bank-a:savings-1-bank-a    0 EUR = 5558.40 EUR
+    assets:bank-b:checking-bank-b     0 EUR = 0 EUR
+    assets:bank-b:pea-bank-b:especes  0 EUR = 38.01 EUR
+    assets:swile:meal-vouchers        0 EUR = 73.10 EUR

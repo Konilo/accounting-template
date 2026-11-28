@@ -1,0 +1,22 @@
+; Corrections to specific rows of the Bank A checking account exports, where
+; the bank's category is wrong and no general pattern exists.
+; Included at the end of import/bank_a__checking.rules, so these assignments
+; override the import rules. Keyed on the bank reference, or on the date and
+; label when a row has no reference.
+
+; ==== Employer A wire mixing a salary bonus and an expense claim (split by hand)
+if %reference ^2433559K10057514$
+	account2 revenues:wages:employer-a:bank-wire
+	amount2 -150,00
+	account3 revenues:refunds:employer-a:expense-claims
+	amount3 -42,30
+
+; ==== Other recategorisations
+; Bought at a bookshop, categorised by the bank as general shopping
+if %reference ^2419359BP0002189$
+	account2 expenses:discretionary:books
+if
+%date 21/08/2025
+&& %libelle-simpl ^CB MARCHE DU SOIR$
+	account2 expenses:essential:food:other
+	comment market stall, categorised by the bank as a bar
